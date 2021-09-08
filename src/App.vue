@@ -7,6 +7,10 @@
   />
   <Score class="score" :score="score" />
   <Answer class="answer" v-model="answer" />
+  <Control class="control"
+    @random="random"
+    @clear="clear"
+  />
 </template>
 
 <script lang="ts">
@@ -14,12 +18,14 @@ import { computed, defineComponent, reactive, ref } from 'vue'
 import Board from './components/Board.vue'
 import Score from './components/Score.vue'
 import Answer from './components/Answer.vue'
+import Control from './components/Control.vue'
 
 export default defineComponent({
   components: {
     Board,
     Score,
-    Answer
+    Answer,
+    Control
   },
   setup () {
     const state = reactive(Array(64).fill(false))
@@ -41,12 +47,25 @@ export default defineComponent({
       state[index] = !state[index]
     }
 
+    const random = () => {
+      Object.assign(state, state.map(_ => {
+        return Math.random() < 0.2
+      }))
+    }
+
+    const clear = () => {
+      Object.assign(state, state.map(_ => false))
+      answer.value = NaN
+    }
+
     return {
       state,
       score,
       answer,
       diffToAnswer,
-      toggle
+      toggle,
+      random,
+      clear
     }
   }
 })
@@ -65,8 +84,9 @@ export default defineComponent({
   grid-template-areas:
     "board score"
     "board answer"
+    "board control"
   ;
-  grid-template-rows: 400px 400px;
+  grid-template-rows: 400px 200px 200px;
   grid-template-columns: 800px 1fr;
   .board {
     grid-area: board;
@@ -76,6 +96,9 @@ export default defineComponent({
   }
   .answer {
     grid-area: answer;
+  }
+  .control {
+    grid-area: control;
   }
 }
 </style>
