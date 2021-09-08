@@ -9,18 +9,11 @@
 import { defineComponent, SetupContext } from 'vue'
 
 export default defineComponent({
+  emits: ['random', 'clear'],
   setup (_, context: SetupContext) {
-    const random = () => {
-      context.emit('random')
-    }
-
-    const clear = () => {
-      context.emit('clear')
-    }
-
     return {
-      random,
-      clear
+      random () { context.emit('random') },
+      clear () { context.emit('clear') }
     }
   }
 })

@@ -43,29 +43,21 @@ export default defineComponent({
       return isNaN(answer.value) ? NaN : score.value ^ answer.value
     })
 
-    const toggle = (index: number) => {
-      state[index] = !state[index]
-    }
-
-    const random = () => {
-      Object.assign(state, state.map(_ => {
-        return Math.random() < 0.2
-      }))
-    }
-
-    const clear = () => {
-      Object.assign(state, state.map(_ => false))
-      answer.value = NaN
-    }
-
     return {
       state,
       score,
       answer,
       diffToAnswer,
-      toggle,
-      random,
-      clear
+      toggle (index: number) {
+        state[index] = !state[index]
+      },
+      random () {
+        Object.assign(state, state.map(() => Math.random() < 0.2))
+      },
+      clear () {
+        Object.assign(state, state.map(() => false))
+        answer.value = NaN
+      }
     }
   }
 })

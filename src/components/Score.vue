@@ -7,15 +7,14 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { validate64 } from '../utils/validator'
 
 export default defineComponent({
   props: {
     score: {
       type: Number,
       required: true,
-      validator (val: number) {
-        return val >= 0 && val <= 63
-      }
+      validator: validate64()
     }
   }
 })

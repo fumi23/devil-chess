@@ -7,6 +7,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, SetupContext } from 'vue'
+import { validate64 } from '../utils/validator'
 
 type Props = {
   modelValue: number
@@ -17,11 +18,10 @@ export default defineComponent({
     modelValue: {
       type: Number,
       required: true,
-      validator (val: number) {
-        return isNaN(val) || (val >= 0 && val <= 63)
-      }
+      validator: validate64({ allowNaN: true })
     }
   },
+  emits: ['update:modelValue'],
   setup (props: Props, context: SetupContext) {
     const answer = computed({
       get () {

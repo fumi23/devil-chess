@@ -14,6 +14,7 @@
 <script lang="ts">
 import { defineComponent, PropType, SetupContext } from 'vue'
 import Cell from './Cell.vue'
+import { validate64 } from '../utils/validator'
 
 type Props = {
   state: boolean[]
@@ -35,11 +36,10 @@ export default defineComponent({
     diffToAnswer: {
       type: Number,
       required: true,
-      validator (val: number) {
-        return isNaN(val) || (val >= 0 && val <= 63)
-      }
+      validator: validate64({ allowNaN: true })
     }
   },
+  emits: ['toggle'],
   setup (props: Props, context: SetupContext) {
     const background = (index: number) => {
       const rankParity = Math.floor(index / 8) % 2
@@ -51,14 +51,12 @@ export default defineComponent({
       return index === props.diffToAnswer
     }
 
-    const toggle = (index: number) => {
-      context.emit('toggle', index)
-    }
-
     return {
       background,
       highlighted,
-      toggle
+      toggle (index: number) {
+        context.emit('toggle', index)
+      }
     }
   }
 })
