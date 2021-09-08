@@ -1,20 +1,19 @@
 <template>
   <div class="board">
-    <div
-      class="cell"
+    <Cell
       v-for="(hasPiece, index) in state"
       :key="index"
-      :class="cellClass(index)"
+      :background="background(index)"
+      :highlighted="highlighted(index)"
+      :hasPiece="hasPiece"
       @click="toggle(index)"
-    >
-      <span v-if="hasPiece" class="piece">♟</span>
-    </div>
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, SetupContext } from 'vue'
-// import Cell from './components/Cell.vue'
+import Cell from './Cell.vue'
 
 type Props = {
   state: boolean[]
@@ -23,7 +22,7 @@ type Props = {
 
 export default defineComponent({
   components: {
-    // Cell
+    Cell
   },
   props: {
     state: {
@@ -42,11 +41,14 @@ export default defineComponent({
     }
   },
   setup (props: Props, context: SetupContext) {
-    const cellClass = (index: number) => {
+    const background = (index: number) => {
       const rankParity = Math.floor(index / 8) % 2
       const fileParity = (index % 8) % 2
-      const background = rankParity ^ fileParity ? 'black' : 'white'
-      return [background, { diff: index === props.diffToAnswer }]
+      return rankParity ^ fileParity ? 'black' : 'white'
+    }
+
+    const highlighted = (index: number) => {
+      return index === props.diffToAnswer
     }
 
     const toggle = (index: number) => {
@@ -54,7 +56,8 @@ export default defineComponent({
     }
 
     return {
-      cellClass,
+      background,
+      highlighted,
       toggle
     }
   }
@@ -65,22 +68,5 @@ export default defineComponent({
 .board {
   display: flex;
   flex-wrap: wrap;
-  .cell {
-    width: 100px;
-    height: 100px;
-    &.white {
-      background-color: #EEEEEE;
-    }
-    &.black {
-      background-color: #666666;
-    }
-    &.diff {
-      border: 8px solid gold;
-      box-sizing: border-box;
-    }
-    .piece {
-      font-size: 80px;
-    }
-  }
 }
 </style>
