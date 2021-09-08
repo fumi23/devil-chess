@@ -6,7 +6,7 @@
     @toggle="toggle"
   />
   <Score class="score" :score="score" />
-  <Answer class="answer" v-model="answer" />
+  <Answer class="answer" v-model:answer="answer" />
   <Control class="control"
     @random="random"
     @clear="clear"
