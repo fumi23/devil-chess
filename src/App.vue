@@ -5,10 +5,7 @@
     :diffToAnswer="diffToAnswer"
     @toggle="toggle"
   />
-  <div class="score">
-    <label for="output">チェス盤の状況を数値化したもの</label>
-    <output id="output">{{ score + 1 }}</output>
-  </div>
+  <Score class="score" :score="score" />
   <div class="answer">
     <label for="answer">伝えたい数字</label>
     <input id="answer" type="number" min="1" max="64" v-model.number="answer" />
@@ -18,10 +15,12 @@
 <script lang="ts">
 import { computed, defineComponent, reactive, ref } from 'vue'
 import Board from './components/Board.vue'
+import Score from './components/Score.vue'
 
 export default defineComponent({
   components: {
-    Board
+    Board,
+    Score
   },
   setup () {
     const state = reactive(Array(64).fill(false))
@@ -74,14 +73,6 @@ export default defineComponent({
   }
   .score {
     grid-area: score;
-    padding: 24px;
-    label {
-      font-size: 24px;
-    }
-    output {
-      display: block;
-      font-size: 240px;
-    }
   }
   .answer {
     grid-area: answer;
