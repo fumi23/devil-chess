@@ -39,8 +39,13 @@ export default defineComponent({
     background-color: #EEEEEE;
   }
   &.highlighted {
-    border: 8px solid gold;
     box-sizing: border-box;
+    border: 8px solid;
+    animation: blink 1.2s infinite;
+    @keyframes blink {
+      0% { border-color: gold }
+      100% { border-color: transparent }
+    }
   }
   .piece {
     font-size: 80px;
