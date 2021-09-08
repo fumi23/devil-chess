@@ -1,4 +1,5 @@
 # devil-chess
+GitHub Pages: https://fumi23.github.io/devil-chess/
 元ネタ: https://sist8.com/chess2you
 
 ## Project setup
