@@ -1,15 +1,10 @@
 <template>
-  <div class="board">
-    <div
-      class="cell"
-      v-for="(hasPiece, index) in state"
-      :key="index"
-      :class="cellClass(index)"
-      @click="toggle(index)"
-    >
-      <span v-if="hasPiece" class="piece">♟</span>
-    </div>
-  </div>
+  <Board
+    class="board"
+    :state="state"
+    :diffToAnswer="diffToAnswer"
+    @toggle="toggle"
+  />
   <div class="score">
     <label for="output">チェス盤の状況を数値化したもの</label>
     <output id="output">{{ score + 1 }}</output>
@@ -22,9 +17,11 @@
 
 <script lang="ts">
 import { computed, defineComponent, reactive, ref } from 'vue'
+import Board from './components/Board.vue'
 
 export default defineComponent({
   components: {
+    Board
   },
   setup () {
     const state = reactive(Array(64).fill(false))
@@ -41,13 +38,6 @@ export default defineComponent({
       return isNaN(answer.value) ? NaN : score.value ^ (answer.value - 1)
     })
 
-    const cellClass = (index: number) => {
-      const rankParity = Math.floor(index / 8) % 2
-      const fileParity = (index % 8) % 2
-      const background = rankParity ^ fileParity ? 'black' : 'white'
-      return [background, { diff: index === diffToAnswer.value }]
-    }
-
     const toggle = (index: number) => {
       state[index] = !state[index]
     }
@@ -56,7 +46,7 @@ export default defineComponent({
       state,
       answer,
       score,
-      cellClass,
+      diffToAnswer,
       toggle
     }
   }
@@ -81,25 +71,6 @@ export default defineComponent({
   grid-template-columns: 800px 1fr;
   .board {
     grid-area: board;
-    display: flex;
-    flex-wrap: wrap;
-    .cell {
-      width: 100px;
-      height: 100px;
-      &.white {
-        background-color: #EEEEEE;
-      }
-      &.black {
-        background-color: #666666;
-      }
-      &.diff {
-        border: 8px solid gold;
-        box-sizing: border-box;
-      }
-      .piece {
-        font-size: 80px;
-      }
-    }
   }
   .score {
     grid-area: score;
